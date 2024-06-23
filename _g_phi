@@ -1,0 +1,13 @@
+#!/bin/bash
+
+make re
+
+# Check if make command was successful
+if [ $? -eq 0 ]; then
+    # If make command was successful, gdb
+     gdb --args ./philo "$@"
+else
+    # If make command failed, display an error message
+    echo "Error: Make command failed."
+fi
+

@@ -1,0 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schmitzi <schmitzi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/22 15:30:51 by schmitzi          #+#    #+#             */
+/*   Updated: 2024/06/22 15:30:52 by schmitzi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
+
+long	ft_atoi(char *nptr)
+{
+	int		i;
+	long	num;
+	long	sign;
+
+	sign = 0;
+	num = 0;
+	i = 0;
+	while (*nptr == ' ' || *nptr == '\n' || *nptr == '\t' || *nptr == '\v'
+		|| *nptr == '\r' || *nptr == '\f')
+		nptr++;
+	{
+		if (*nptr == '-')
+			sign = 1;
+		if (*nptr == '-' || *nptr == '+')
+			nptr++;
+		while (nptr[i] >= 48 && nptr[i] <= 57)
+		{
+			num = (nptr[i] - 48) + (10 * num);
+			i++;
+		}
+		if (sign == 1)
+			num = num * -1;
+	}
+	return (num);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
+
+void	ft_perror(char *str)
+{
+	int i;
+
+	i = 0;
+	if (*str == '\0')
+	{
+		while (str[i] != '\0')
+		{
+			write(2, &str[i], 1);
+			i++;
+		}
+	}
+	write(2, "\n", 1);
+}
