@@ -1,20 +1,28 @@
 #include "philo.h"
+#include <bits/types/struct_timeval.h>
 #include <complex.h>
+#include <pthread.h>
+#include <sys/time.h>
 
 void	messages(char *str, t_philo *philo)
 {
 	u_int64_t	time;
+	struct timeval tv;
 
-	pthread_mutex_lock(&philo->info->write);
-	time = get_time() - philo->info->begin;
-	if (ft_strcmp("has died", str) == 0 && philo->info->dead == 0)
-	{
-		printf("%lu %ld %s\n", time, philo->id, str);
-		philo->info->dead = 1;
-	}
-	if (!philo->info->dead)
-		printf("%lu %ld %s\n", time, philo->id, str);
-	pthread_mutex_unlock(&philo->info->write);
+	pthread_mutex_lock(&philo->info->death_check);
+		if (philo->info->dead != 1)
+		{
+    		if (gettimeofday(&tv, NULL) != 0)
+            {
+    		   ft_putstr_fd("Failed: time", 2);
+                return ;
+            }
+    		time = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - philo->info->begin;
+			printf("%zu\t%zu %s\n", time, philo->id, str);
+			pthread_mutex_unlock(&philo->info->death_check);
+			return ;
+		}
+		pthread_mutex_unlock(&philo->info->death_check);
 }
 
 void *monitor(void *ptr)
@@ -22,15 +30,27 @@ void *monitor(void *ptr)
     t_philo *philo;
 
     philo = (t_philo *)ptr;
-    while (philo->info->dead == 0)
+    while (1)
     {
         pthread_mutex_lock(&philo->info->write);
-        if (philo->info->finished >= philo->info->num_philo)
+        if (philo->info->end >= philo->info->num_philo)
             philo->info->dead = 1;
         pthread_mutex_unlock(&philo->info->write);
-        ft_usleep(1000);
+        ft_usleep(philo, 1000);
     }
-    return (void *)0;
+    return (philo);
+}
+
+int death_check(t_philo *philo)
+{
+    if (philo->num_meal < philo->info->num_meal)
+    {
+        pthread_mutex_lock(&philo->info->death_check);
+        if (philo->info->dead == 1)
+            return (pthread_mutex_unlock(&philo->info->death_check), 1);
+        return (pthread_mutex_unlock(&philo->info->death_check), 0);
+    }
+    return (1);
 }
 
 void *routine(void *ptr)
@@ -38,85 +58,70 @@ void *routine(void *ptr)
     t_philo *philo;
 
     philo = (t_philo *)ptr;
-    philo->til_death = philo->info->til_death + get_time();
-    if (pthread_create(&philo->thread, NULL, &supervisor, (void *)philo) != 0)
+
+    if (philo->info->num_philo % 2 != 0)
     {
-        free(philo);
-        return (void *)1;
+        if (philo->id == philo->info->num_philo && philo->info->num_philo != 1)
+            ft_usleep(philo, philo->info->eat_dur * 2);
+        if (philo->id % 2 == 0)
+            ft_usleep(philo, philo->info->eat_dur);
     }
-    while (philo->info->dead == 0)
+    else
+        ft_usleep(philo, philo->info->eat_dur);
+    pthread_mutex_lock(&philo->info->write);
+    while (death_check(philo) == 0)
     {
+        pthread_mutex_unlock(&philo->info->write);
         eat(philo);
-        if (philo->info->dead == 0)
+        pthread_mutex_lock(&philo->info->write);
+        if (philo->num_meal == philo->info->num_meal)
         {
-            messages("is thinking", philo);
-            ft_usleep(1000);
+            pthread_mutex_lock(&philo->info->death_check);
+            philo->info->dead = true;
+            pthread_mutex_unlock(&philo->info->death_check);
+            pthread_mutex_unlock(&philo->info->write);
+            return (NULL);
         }
+        pthread_mutex_unlock(&philo->info->write);
+        messages("is sleeping", philo);
+        ft_usleep(philo, philo->info->sleep_dur);
+        messages("is thinking", philo);
+        pthread_mutex_lock(&philo->info->write);
     }
-    if (pthread_join(philo->thread, NULL) != 0)
-    {
-        free(philo);
-        return (void *)1;
-    }
-    return (void *)0;
+    pthread_mutex_unlock(&philo->info->write);
+    return (philo);
 }
 
-void *supervisor(void *ptr)
+void	take_forks(t_philo *philo, pthread_mutex_t *left, pthread_mutex_t *right)
 {
-    int meals;
-    t_philo *philo;
-
-    philo = (t_philo *)ptr;
-    meals = 0;
-    philo->eat = 0;
-    while (philo->info->dead == 0)
-    {
-        pthread_mutex_lock(&philo->lock);
-        if (get_time() >= philo->til_death && philo->eat == 0)
-            messages("has died", philo);
-        if (philo->num_meal == philo->info->num_meal && meals == 0)
-        {
-            philo->info->finished++;
-            meals = 1;
-        }
-        pthread_mutex_unlock(&philo->lock);
-        ft_usleep(1000);
-    }
-    return (void *)0;
-}
-
-void	take_forks(t_philo *philo)
-{
-	pthread_mutex_lock(philo->left_fork);
-	messages("took left fork", philo);
-	ft_usleep(1000);
-	pthread_mutex_lock(philo->right_fork);
-	messages("took right fork", philo);
-}
-
-void	drop_forks(t_philo *philo)
-{
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
-	messages("is sleeping", philo);
-	ft_usleep(philo->info->sleep_dur * 1000);
+	if (philo->info->num_philo % 2 != 0 && philo->info->num_philo != 1)
+	  ft_usleep(philo, 50);
+    pthread_mutex_lock(left);
+	messages("has taken a fork", philo);
+	if (left == right)
+	{
+	   pthread_mutex_unlock(left);
+	   ft_usleep(philo, philo->info->til_death);
+	   return ;
+	}
+	pthread_mutex_lock(right);
+	messages("has taken a fork", philo);
 }
 
 void	eat(t_philo *philo)
 {
-	int64_t	time;
-
-	take_forks(philo);
-	pthread_mutex_lock(&philo->lock);
-	philo->eat = 1;
-	time = get_time();
-	philo->til_death = time + philo->info->til_death;
-	messages("is eating", philo);
-	ft_usleep(philo->info->eat_dur * 1000);
+    if (philo->id % 2 == 0 && philo->info->num_philo != 1)
+        take_forks(philo, philo->right_fork, philo->left_fork);
+    else
+        take_forks(philo, philo->left_fork, philo->right_fork);
+    if (philo->info->num_philo == 1)
+        return (ft_usleep(philo, philo->info->til_death));
+    pthread_mutex_lock(&philo->lock);
 	philo->num_meal++;
-	philo->eat = 0;
+	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->lock);
-	drop_forks(philo);
-	messages("is thinking", philo);
-	ft_usleep(1000);
+	messages("is eating", philo);
+	ft_usleep(philo, philo->info->eat_dur);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 }

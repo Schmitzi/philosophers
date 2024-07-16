@@ -35,7 +35,7 @@ void	*routine(void *ptr)
 	if (pthread_join(philo->thread, NULL) == 1)
 		return (free(philo), (void *)1);
 	//free(philo);
-	return ((void *)0);
+	return (ptr);
 }
 
 void	*monitor(void *ptr)
@@ -51,29 +51,5 @@ void	*monitor(void *ptr)
 		pthread_mutex_unlock(&philo->info->write);
 		ft_usleep(1000);
 	}
-	return ((void *) 0);
-}
-
-void	*supervisor(void *ptr)
-{
-	int		meals;
-	t_philo	*philo;
-
-	philo = (t_philo *) ptr;
-	meals = 0;
-	philo->eat = 0;
-	while (philo->info->dead == 0)
-	{
-		pthread_mutex_lock(&philo->lock);
-		if (get_time() >= philo->until_death && philo->eat == 0)
-			messages("has died", philo);
-		if (philo->meals == philo->info->meals && meals == 0)
-		{
-			philo->info->finished++;
-			meals = 1;
-		}
-		pthread_mutex_unlock(&philo->lock);
-		ft_usleep(1000);
-	}
-	return ((void *)0);
+	return (ptr);
 }

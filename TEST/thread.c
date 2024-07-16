@@ -1,6 +1,6 @@
 #include "philo.h"
 
-static void	destroy_mutex(t_philo *philo)
+void	destroy_mutex(t_philo *philo)
 {
 	size_t	i;
 
@@ -12,7 +12,7 @@ static void	destroy_mutex(t_philo *philo)
 		i++;
 	}
 	pthread_mutex_destroy(&philo->info->write);
-	pthread_mutex_destroy(&philo->info->died);
+	pthread_mutex_destroy(&philo->info->death_check);
 }
 
 int	thread_init(t_philo *philo)
@@ -31,19 +31,19 @@ int	thread_init(t_philo *philo)
 			philo[i].state = 2;
 			destroy_mutex(philo);
 			pthread_mutex_unlock(&philo[i].lock);
-			return (1);
+			return (false);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
 	}
-	if (pthread_create(&make, NULL, &monitor, philo) != 0)
-		return (destroy_mutex(philo), 1);
+	if (pthread_create(&make, NULL, monitor, philo) != 0)
+		return (destroy_mutex(philo), false);
 	i = 0;
 	pthread_join(make, NULL);
 	while (i < philo->info->num_philo && philo[i].state != 2)
 	{
 		if (pthread_join(thread[i], NULL) != 0)
-			return (destroy_mutex(philo), 1);
+			return (destroy_mutex(philo), false);
 		i++;
 	}
-	return (0);
+	return (true);
 }

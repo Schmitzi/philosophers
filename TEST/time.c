@@ -9,18 +9,25 @@ u_int64_t	get_time(void)
 	return ((time.tv_sec * (u_int64_t)1000) + (time.tv_usec / 1000));
 }
 
-void	ft_usleep(unsigned int ms)
+void	ft_usleep(t_philo *philo, unsigned int ms)
 {
 	struct timeval	start;
-	struct timeval	current;
-	unsigned int	elapsed;
+	struct timeval	now;
+	size_t			elapsed;
 
-	elapsed = 0;
 	gettimeofday(&start, NULL);
-	while (elapsed < ms)
+	while (1)
 	{
-		gettimeofday(&current, NULL);
-		elapsed = (current.tv_sec - start.tv_sec) * 1000000 + \
-		(current.tv_usec - start.tv_usec);
+		gettimeofday(&now, NULL);
+		elapsed = (now.tv_sec - start.tv_sec) * 1000
+			+ (now.tv_usec - start.tv_usec) / 1000;
+		pthread_mutex_lock(&philo->info->death_check);
+		if (elapsed >= ms || philo->info->dead != 0)
+		{
+			pthread_mutex_unlock(&philo->info->death_check);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->info->death_check);
+		usleep(400);
 	}
 }

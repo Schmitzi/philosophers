@@ -9,23 +9,31 @@
 # include <time.h>
 # include <stdbool.h>
 
-# define TRUE 1
-# define FALSE 0
-
+//DEFINES
 # define MAX 500
+
+//STRUCTS
+
+enum e_state
+{
+    THINKING,
+    EATING,
+    SLEEPING,
+    DEAD
+};
 
 typedef struct s_info
 {
 	size_t			num_philo;
 	size_t			num_meal;
 	size_t			dead;
-	size_t			finished;
 	size_t			til_death;
 	size_t			eat_dur;
 	size_t			sleep_dur;
 	size_t			begin;
+	size_t          end;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	died;
+	pthread_mutex_t	death_check;
 	pthread_mutex_t	write;
 }	t_info;
 
@@ -38,12 +46,12 @@ typedef struct s_philo
 	size_t			   til_death;
 	size_t			   num_meal;
 	size_t		       last_meal;
+	size_t             stop;
 	pthread_t          thread;
 	pthread_mutex_t    lock;
-	pthread_mutex_t    *right_fork;
 	pthread_mutex_t    *left_fork;
+	pthread_mutex_t    *right_fork;
 	t_info             *info;
-	struct s_philo     *next;
 }	t_philo;
 
 //ARGS
@@ -63,8 +71,8 @@ int     mutex_init(t_philo *philo);
 
 //ROUTINE
 void	messages(char *str, t_philo *philo);
-void	take_forks(t_philo *philo);
-void    drop_forks(t_philo *philo);
+void    take_forks(t_philo *philo, pthread_mutex_t *left, pthread_mutex_t *right);
+void    drop_forks(t_philo *philo, pthread_mutex_t *left, pthread_mutex_t *right);
 void    *routine(void *ptr);
 void    *monitor(void *ptr);
 void    *supervisor(void *philo);
@@ -72,9 +80,10 @@ void	eat(t_philo *philo);
 
 //THREAD
 int thread_init(t_philo *philo);
+
 //TIME
 u_int64_t	get_time(void);
-void	ft_usleep(unsigned int ms);
+void	ft_usleep(t_philo *philo, unsigned int ms);
 
 //UTIL
 int     ft_putstr_fd(char *str, int fd);
@@ -85,3 +94,5 @@ void	ft_perror(char *str);
 
 
 int	ft_error(char *str);
+int death_check(t_philo *philo);
+void	destroy_mutex(t_philo *philo);

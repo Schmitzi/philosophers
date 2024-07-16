@@ -26,24 +26,24 @@ void    init_philo(t_philo *philo)
         philo[i].num_meal = 0;
         philo[i].state = 0;
         philo[i].last_meal = 0;
-        if (i % 2 == 0)
-        {
-            philo[i].left_fork = &philo->info->forks[i];
-            philo[i].right_fork = &philo->info->forks[(i + 1) % philo->info->num_philo];
-        }
-        else
-        {
-            philo[i].right_fork = &philo->info->forks[i];
-            philo[i].left_fork = &philo->info->forks[(i + 1) % philo->info->num_philo];
-        }
+        philo[i].stop = 0;
+        if (philo->id % 2 == 0)
+		{
+		  philo[i].right_fork = &philo->info->forks[philo[i].id - 1];
+		  philo[i].left_fork = &philo->info->forks[(philo[i].id) % philo->info->num_philo];
+		}
+		else
+		{
+			philo[i].right_fork = &philo->info->forks[(philo[i].id) % philo->info->num_philo];
+			philo[i].left_fork = &philo->info->forks[philo[i].id - 1];
+		}
         i++;
     }
 }
 
+
 int init_info(t_philo *philo, char **argv)
 {
-    philo->info->dead = 0;
-    philo->info->finished = 0;
     philo->info->num_philo = ft_atoi(argv[1]);
     philo->info->til_death = ft_atoi(argv[2]);
     philo->info->eat_dur = ft_atoi(argv[3]);
@@ -59,5 +59,7 @@ int init_info(t_philo *philo, char **argv)
 		* (ft_atoi(argv[1])));
 	if (philo->info->forks == NULL)
 		return (ft_error("Error malloc\n"), false);
+    philo->info->dead = false;
+    philo->info->end = false;
 	return (true);
 }
