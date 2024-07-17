@@ -5,7 +5,7 @@ void	destroy_mutex(t_philo *philo)
 	size_t	i;
 
 	i = 0;
-	while (i < philo->info->num_philo && philo[i].state == 2)
+	while (i < philo->info->count && philo[i].state == 2)
 	{
 		pthread_mutex_destroy(&philo->info->forks[i]);
 		pthread_mutex_destroy(&philo[i].lock);
@@ -21,8 +21,8 @@ int	thread_init(t_philo *philo)
 	pthread_t	thread[MAX];
 	pthread_t   make;
 
-	i = -1;
-	while (++i < philo->info->num_philo)
+	i = 0;
+	while (i < philo->info->count)
 	{
 		philo[i].info = philo->info;
 		pthread_mutex_lock(&philo[i].lock);
@@ -31,19 +31,20 @@ int	thread_init(t_philo *philo)
 			philo[i].state = 2;
 			destroy_mutex(philo);
 			pthread_mutex_unlock(&philo[i].lock);
-			return (false);
+			return (1);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
-	}
-	if (pthread_create(&make, NULL, monitor, philo) != 0)
-		return (destroy_mutex(philo), false);
-	i = 0;
-	pthread_join(make, NULL);
-	while (i < philo->info->num_philo && philo[i].state != 2)
-	{
-		if (pthread_join(thread[i], NULL) != 0)
-			return (destroy_mutex(philo), false);
 		i++;
 	}
-	return (true);
+	if (pthread_create(&make, NULL, monitor, philo) != 0)
+		return (destroy_mutex(philo), 1);
+	i = 0;
+	pthread_join(make, NULL);
+	while (i < philo->info->count && philo[i].state != 2)
+	{
+		if (pthread_join(thread[i], NULL) != 0)
+			return (destroy_mutex(philo), 1);
+		i++;
+	}
+	return (0);
 }

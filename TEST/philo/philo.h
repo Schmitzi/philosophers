@@ -24,8 +24,8 @@ enum e_state
 
 typedef struct s_info
 {
-	size_t			num_philo;
-	size_t			num_meal;
+	size_t			count;
+	size_t			meals;
 	size_t			dead;
 	size_t			til_death;
 	size_t			eat_dur;
@@ -40,11 +40,10 @@ typedef struct s_info
 typedef struct s_philo
 {
 	size_t			   id;
-	size_t			   full;
 	size_t			   state;
 	size_t			   eat;
 	size_t			   til_death;
-	size_t			   num_meal;
+	size_t			   meals_eaten;
 	size_t		       last_meal;
 	size_t             stop;
 	pthread_t          thread;
@@ -70,7 +69,7 @@ void    init_philo(t_philo *philo);
 int     mutex_init(t_philo *philo);
 
 //ROUTINE
-void	messages(char *str, t_philo *philo);
+void	messages(char *str, t_philo *philo, size_t id);
 void    take_forks(t_philo *philo, pthread_mutex_t *left, pthread_mutex_t *right);
 void    drop_forks(t_philo *philo, pthread_mutex_t *left, pthread_mutex_t *right);
 void    *routine(void *ptr);
@@ -96,3 +95,4 @@ void	ft_perror(char *str);
 int	ft_error(char *str);
 int death_check(t_philo *philo);
 void	destroy_mutex(t_philo *philo);
+size_t	get_timestamp(void);

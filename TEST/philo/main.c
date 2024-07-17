@@ -11,7 +11,7 @@ int	main(int argc, char **argv)
 			return (false);
 		if (init_all(philo, argv) == false)
 			return (false);
-		if (thread_init(philo) == false)
+		if (thread_init(philo) == 0)
 		    return (destroy_mutex(philo), free(philo->info->forks), false);
 		return (destroy_mutex(philo), free(philo->info->forks), true);
 	}
