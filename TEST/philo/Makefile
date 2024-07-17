@@ -26,9 +26,11 @@ U_LINE	=	\e[4m
 RESET	=	\e[0m
 
 FILES	=	args \
-            error \
+            free \
 			init \
+			libft \
 			main \
+			msg \
 			mutex \
 			routine \
 			thread \
