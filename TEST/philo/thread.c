@@ -1,25 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   thread.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:05:02 by mgeiger-          #+#    #+#             */
+/*   Updated: 2024/07/17 15:05:22 by mgeiger-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void	destroy_mutex(t_philo *philo)
+int	make_threads(t_philo *philo, pthread_t *thread)
 {
 	size_t	i;
-
-	i = 0;
-	while (i < philo->info->count && philo[i].state == 2)
-	{
-		pthread_mutex_destroy(&philo->info->forks[i]);
-		pthread_mutex_destroy(&philo[i].lock);
-		i++;
-	}
-	pthread_mutex_destroy(&philo->info->write);
-	pthread_mutex_destroy(&philo->info->death_check);
-}
-
-int	thread_init(t_philo *philo)
-{
-	size_t		i;
-	pthread_t	thread[MAX];
-	pthread_t   make;
 
 	i = 0;
 	while (i < philo->info->count)
@@ -36,10 +31,21 @@ int	thread_init(t_philo *philo)
 		pthread_mutex_unlock(&philo[i].lock);
 		i++;
 	}
-	if (pthread_create(&make, NULL, monitor, philo) != 0)
+	return (0);
+}
+
+int	thread_init(t_philo *philo)
+{
+	size_t		i;
+	pthread_t	thread[MAX];
+	pthread_t	monitor_thread;
+
+	i = 0;
+	make_threads(philo, thread);
+	if (pthread_create(&monitor_thread, NULL, monitor, philo) != 0)
 		return (destroy_mutex(philo), 1);
 	i = 0;
-	pthread_join(make, NULL);
+	pthread_join(monitor_thread, NULL);
 	while (i < philo->info->count && philo[i].state != 2)
 	{
 		if (pthread_join(thread[i], NULL) != 0)
