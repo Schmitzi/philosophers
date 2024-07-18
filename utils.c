@@ -5,61 +5,48 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/22 15:31:12 by schmitzi          #+#    #+#             */
-/*   Updated: 2024/06/23 15:29:11 by mgeiger-         ###   ########.fr       */
+/*   Created: 2024/07/17 15:07:12 by mgeiger-          #+#    #+#             */
+/*   Updated: 2024/07/17 15:07:13 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	arg_check(char **argv)
+int	death_check(t_philo *philo)
 {
-	int		i;
-	int		j;
-	char	c;
-
-	i = 1;
-	while (argv[i])
+	if (philo->meals_eaten < philo->info->meals)
 	{
-		j = 0;
-		while (argv[i][j])
-		{
-			c = argv[i][j];
-			if (c == ' ')
-			{
-				++j;
-				continue ;
-			}
-			if (c < '0' || c > '9')
-				return (ft_error("Out of range", NULL), 1);
-			++j;
-		}
-		++i;
+		pthread_mutex_lock(&philo->info->death_check);
+		if (philo->info->dead == 1)
+			return (pthread_mutex_unlock(&philo->info->death_check), 1);
+		return (pthread_mutex_unlock(&philo->info->death_check), 0);
 	}
-	return (0);
+	return (1);
 }
 
-u_int64_t	get_time(void)
+void	form_queue(t_philo *philo)
 {
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL))
-		ft_error("Time Failed\n", NULL);
-	return ((time.tv_sec * (u_int64_t)1000) + (time.tv_usec / 1000));
+	if (philo->info->count % 2 != 0)
+	{
+		if (philo->id == philo->info->count && philo->info->count != 1)
+			ft_usleep (philo, (philo->info->eat_dur * 2));
+		if (philo->id % 2 == 0)
+			ft_usleep (philo, philo->info->eat_dur);
+	}
+	else
+		if (philo->id % 2 != 0)
+			ft_usleep (philo, philo->info->eat_dur);
 }
 
-void	messages(char *str, t_philo *philo)
+int	meal_check(t_philo *philo)
 {
-	u_int64_t	time;
-
-	pthread_mutex_lock(&philo->info->write);
-	time = get_time() - philo->info->start_time;
-	if (ft_strcmp("has died", str) == 0 && philo->info->dead == 0)
+	if (philo->meals_eaten == philo->info->meals)
 	{
-		printf("%lu %ld %s\n", time, philo->id, str);
-		philo->info->dead = 1;
+		pthread_mutex_lock(&philo->info->death_check);
+		philo->stop = 1;
+		pthread_mutex_unlock(&philo->info->death_check);
+		pthread_mutex_unlock(&philo->info->write);
+		return (false);
 	}
-	if (!philo->info->dead)
-		printf("%lu %ld %s\n", time, philo->id, str);
-	pthread_mutex_unlock(&philo->info->write);
+	return (true);
 }

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: schmitzi <schmitzi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/22 15:30:51 by schmitzi          #+#    #+#             */
-/*   Updated: 2024/06/22 15:30:52 by schmitzi         ###   ########.fr       */
+/*   Created: 2024/07/17 15:01:22 by mgeiger-          #+#    #+#             */
+/*   Updated: 2024/07/17 15:01:46 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_putstr_fd(char *str, int fd)
+{
+	if (str != NULL)
+		write(fd, str, ft_strlen(str));
+	return (0);
+}
+
+int	ft_strlen(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 long	ft_atoi(char *nptr)
 {
@@ -42,7 +59,7 @@ long	ft_atoi(char *nptr)
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s1[i] || s2[i])
@@ -56,16 +73,5 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	ft_perror(char *str)
 {
-	int i;
-
-	i = 0;
-	if (*str == '\0')
-	{
-		while (str[i] != '\0')
-		{
-			write(2, &str[i], 1);
-			i++;
-		}
-	}
-	write(2, "\n", 1);
+	write(2, str, ft_strlen(str));
 }

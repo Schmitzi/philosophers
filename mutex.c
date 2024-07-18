@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	mutex_init(t_philo *philo)
+void	mutex_init(t_philo *philo)
 {
 	size_t	i;
 
@@ -25,7 +25,6 @@ int	mutex_init(t_philo *philo)
 		pthread_mutex_init(&philo[i].lock, NULL);
 		i++;
 	}
-	return (true);
 }
 
 void	destroy_mutex(t_philo *philo)

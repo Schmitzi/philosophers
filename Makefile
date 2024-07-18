@@ -25,12 +25,16 @@ BOLD	=	\e[1m
 U_LINE	=	\e[4m
 RESET	=	\e[0m
 
-FILES	=	error \
+FILES	=	args \
+            free \
 			init \
 			libft \
-			philo \
+			main \
+			msg \
+			mutex \
 			routine \
-			threads \
+			thread \
+			time \
 			utils
 
 SRC_DIR = 	./
