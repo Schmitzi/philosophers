@@ -23,7 +23,7 @@ int	make_threads(t_philo *philo, pthread_t *thread)
 		pthread_mutex_lock(&philo[i].lock);
 		if (pthread_create(&thread[i], NULL, routine, &philo[i]) != 0)
 		{
-			philo[i].state = 2;
+			philo[i].state = true;
 			destroy_mutex(philo);
 			pthread_mutex_unlock(&philo[i].lock);
 			return (1);
@@ -46,7 +46,7 @@ int	thread_init(t_philo *philo)
 		return (destroy_mutex(philo), 1);
 	i = 0;
 	pthread_join(monitor_thread, NULL);
-	while (i < philo->info->count && philo[i].state != 2)
+	while (i < philo->info->count && philo[i].state != true)
 	{
 		if (pthread_join(thread[i], NULL) != 0)
 			return (destroy_mutex(philo), 1);

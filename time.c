@@ -11,36 +11,22 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <sys/types.h>
 
-u_int64_t	get_time(void)
+void	ft_usleep(unsigned int ms)
 {
-	struct timeval	time;
+	u_int64_t	begin;
+	u_int64_t	curr;
+	size_t		elapsed;
 
-	if (gettimeofday(&time, NULL))
-		ft_perror("Time Failed\n");
-	return ((time.tv_sec * (u_int64_t)1000) + (time.tv_usec / 1000));
-}
-
-void	ft_usleep(t_philo *philo, unsigned int ms)
-{
-	struct timeval	begin;
-	struct timeval	curr;
-	size_t			elapsed;
-
-	gettimeofday(&begin, NULL);
-	while (1)
+	begin = check_time();
+	while (check_time())
 	{
-		gettimeofday(&curr, NULL);
-		elapsed = (curr.tv_sec - begin.tv_sec) * 1000 + \
-			(curr.tv_usec - begin.tv_usec) / 1000;
-		pthread_mutex_lock(&philo->info->death_check);
-		if (elapsed >= ms || philo->info->dead != 0)
-		{
-			pthread_mutex_unlock(&philo->info->death_check);
+		curr = check_time();
+		elapsed = curr - begin;
+		if (elapsed >= ms)
 			break ;
-		}
-		pthread_mutex_unlock(&philo->info->death_check);
-		usleep(400);
+		usleep(100);
 	}
 	return ;
 }

@@ -29,13 +29,13 @@ void	form_queue(t_philo *philo)
 	if (philo->info->count % 2 != 0)
 	{
 		if (philo->id == philo->info->count && philo->info->count != 1)
-			ft_usleep (philo, (philo->info->eat_dur * 2));
+			ft_usleep (philo->info->eat_dur * 2);
 		if (philo->id % 2 == 0)
-			ft_usleep (philo, philo->info->eat_dur);
+			ft_usleep (philo->info->eat_dur);
 	}
 	else
 		if (philo->id % 2 != 0)
-			ft_usleep (philo, philo->info->eat_dur);
+			ft_usleep (philo->info->eat_dur);
 }
 
 int	meal_check(t_philo *philo)

@@ -32,7 +32,7 @@ void	destroy_mutex(t_philo *philo)
 	size_t	i;
 
 	i = 0;
-	while (i < philo->info->count && philo[i].state == 2)
+	while (i < philo->info->count && philo[i].state == true)
 	{
 		pthread_mutex_destroy(&philo->info->forks[i]);
 		pthread_mutex_destroy(&philo[i].lock);

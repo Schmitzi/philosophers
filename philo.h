@@ -65,6 +65,7 @@ int			arg_checker(int argc, char **argv);
 
 //FREE
 int			ft_exit(t_philo *philo);
+void		ft_perror(char *str);
 
 //INIT
 int			init_all(t_philo *philo, char **argv);
@@ -76,7 +77,7 @@ int			ft_putstr_fd(char *str, int fd);
 int			ft_strlen(char *str);
 long		ft_atoi(char *nptr);
 int			ft_strcmp(char *s1, char *s2);
-void		ft_perror(char *str);
+char		*ft_itoa(int nbr);
 
 //MSG
 void		obituary(t_philo *philo);
@@ -99,8 +100,7 @@ int			make_threads(t_philo *philo, pthread_t *thread);
 int			thread_init(t_philo *philo);
 
 //TIME
-u_int64_t	get_time(void);
-void		ft_usleep(t_philo *philo, unsigned int ms);
+void		ft_usleep(unsigned int ms);
 size_t		check_time(void);
 
 //UTILS
