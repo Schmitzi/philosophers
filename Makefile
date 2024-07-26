@@ -10,24 +10,26 @@
 #                                                                              #
 # **************************************************************************** #
 
+# Name of the program
 NAME	=	philo
 
+# Compiler
 CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra -pthread -g
 RM		=	rm -f
+MAKEFLAGS += --no-print-directory
 
+# Colours
 RED		=	\e[0;91m
-BLUE	=	\e[0;94m
 GREEN	=	\e[0;92m
 YELLOW	=	\e[0;33m
-WHITE	=	\e[0;97m
-BOLD	=	\e[1m
-U_LINE	=	\e[4m
 RESET	=	\e[0m
 
+# Files
 FILES	=	args \
             free \
 			init \
+			itoa \
 			libft \
 			main \
 			msg \
@@ -37,36 +39,52 @@ FILES	=	args \
 			time \
 			utils
 
-SRC_DIR = 	./
+# Directories
+SRC_DIR	=	./
 SRC 	= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
 
+# Objects
 OBJ_DIR	= 	obj/
 OBJ		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(FILES)))
 
-$(OBJ_DIR)%.o: %.c $(wildcard *.h)
-	@mkdir -p obj
-	@$(CC) $(CFLAGS) -c -o $@ $<
+# **************************************************************************** #
 
+# Rules
+
+#Target
 all:	$(NAME)
 
-$(NAME): $(OBJ)
-	@echo "$(YELLOW)Compiling philosophers$(RESET)"
-	@$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
-	@echo "$(GREEN)Philosophers built$(RESET)"
+# Compile .c to .o
+$(OBJ_DIR)%.o: %.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
+# Create obj directory
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+# Link .o to executable
+$(NAME):	$(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
+
+# Clean up
 clean:
+	@echo "$(RED)Cleaning...$(RESET)"
 	@$(RM) $(OBJ)
-	@if [ -d "obj" ]; then \
-		rm -r obj/; \
-	fi
-	@echo "$(RED)Removed objects$(RESET)"
+	@$(RM) -r $(OBJ_DIR)
 
-fclean:	clean
+# Clean up everything
+fclean:		clean
 	@$(RM) $(NAME)
+	@$(RM) -r $(OBJ_DIR)
 	@echo "$(RED)All files cleaned$(RESET)"
 
-re:		fclean all
+# Clean up and recompile
+re:		fclean $(OBJ)
 	clear ;
-	@echo "$(GREEN)Files cleaned and program re-compiled$(RESET)"
+	@if [ -n "$(shell $(CC) -MM $(SRC))" ]; then \
+		echo "$(YELLOW)Recompiling...$(RESET)"; \
+		make all > /dev/null; \
+        echo "$(GREEN)Philosophers is ready$(RESET)"; \
+	fi
 
-.PHONY:		all clean fclean re philo
+.PHONY:		all clean fclean re

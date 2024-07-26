@@ -108,4 +108,6 @@ int			death_check(t_philo *philo);
 void		form_queue(t_philo *philo);
 int			meal_check(t_philo *philo);
 
+int			test(t_philo *philo);
+
 #endif
