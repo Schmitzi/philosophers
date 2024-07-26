@@ -100,7 +100,7 @@ int			make_threads(t_philo *philo, pthread_t *thread);
 int			thread_init(t_philo *philo);
 
 //TIME
-void		ft_usleep(unsigned int ms);
+void		ft_usleep(t_philo *philo, unsigned int ms);
 size_t		check_time(void);
 
 //UTILS

@@ -11,9 +11,10 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
 #include <sys/types.h>
 
-void	ft_usleep(unsigned int ms)
+void	ft_usleep(t_philo *philo, unsigned int ms)
 {
 	u_int64_t	begin;
 	u_int64_t	curr;
@@ -24,8 +25,13 @@ void	ft_usleep(unsigned int ms)
 	{
 		curr = check_time();
 		elapsed = curr - begin;
-		if (elapsed >= ms)
-			break ;
+		pthread_mutex_lock(&philo->info->death_check);
+		if (elapsed >= ms || philo->info->dead != 0)
+		{
+			pthread_mutex_unlock(&philo->info->death_check);
+	 		break ;
+		}
+		pthread_mutex_unlock(&philo->info->death_check);
 		usleep(100);
 	}
 	return ;
