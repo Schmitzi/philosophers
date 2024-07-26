@@ -40,6 +40,7 @@ void	form_queue(t_philo *philo)
 
 int	meal_check(t_philo *philo)
 {
+	printf("%zu | %zu\n", philo->meals_eaten, philo->info->meals);
 	if (philo->meals_eaten == philo->info->meals)
 	{
 		pthread_mutex_lock(&philo->info->death_check);
