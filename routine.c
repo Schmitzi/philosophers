@@ -27,7 +27,7 @@ int	dead_end(t_philo *philo)
 			obituary(philo);
 			pthread_mutex_unlock(&philo[i].lock);
 			pthread_mutex_unlock(&philo->info->death_check);
-			return (1);
+			return (puts("here"), 1);
 		}
 		if (philo[i].stop == 1 && ++philo->info->end == philo->info->count)
 		{
@@ -50,7 +50,10 @@ void	*monitor(void *ptr)
 	while (1)
 	{
 		if (dead_end(philo) == 1)
-			return (NULL);
+		{
+			puts("dead");
+			return (ptr);
+		}
 	}
 	return (ptr);
 }
@@ -64,6 +67,7 @@ void	*routine(void *ptr)
 	pthread_mutex_lock(&philo->info->write);
 	while (death_check(philo) == 0)
 	{
+		puts("test");
 		pthread_mutex_unlock(&philo->info->write);
 		eat(philo);
 		pthread_mutex_lock(&philo->info->write);
@@ -75,6 +79,7 @@ void	*routine(void *ptr)
 		messages("is thinking", philo, philo->id);
 		pthread_mutex_lock(&philo->info->write);
 	}
+	puts("Routine ended");
 	pthread_mutex_unlock(&philo->info->write);
 	return (philo);
 }
