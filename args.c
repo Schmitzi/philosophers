@@ -12,22 +12,27 @@
 
 #include "philo.h"
 
-int	arg_checker(int argc, char **argv)
+int	arg_checker(char **argv)
 {
-	int	i;
+	int			i;
+	int			j;
+	long long	num;
 
 	i = 1;
-	while (i < argc)
+	j = 0;
+	while (argv[i])
 	{
-		//if (*argv[i] == ' ')
-		//{
-		//	i++;
-		//	continue ;
-		//}
-		if (*argv[i] < '0' || *argv[i] > '9')
+		num = ft_atoll(argv[i]);
+		if (num > INT_MAX || num < 0)
 			return (ft_perror("Out of range"), 1);
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (ft_perror("Out of range"), 1);
+			j++;
+		}
 		i++;
 	}
-	argv++;
 	return (0);
 }

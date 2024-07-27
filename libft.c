@@ -29,32 +29,32 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-long	ft_atoi(char *nptr)
+long long	ft_atoll(const char *nptr)
 {
-	int		i;
-	long	num;
-	long	sign;
+	int			i;
+	long long	num;
+	long long	sign;
 
-	sign = 0;
+	sign = 1;
 	num = 0;
 	i = 0;
 	while (*nptr == ' ' || *nptr == '\n' || *nptr == '\t' || *nptr == '\v'
 		|| *nptr == '\r' || *nptr == '\f')
 		nptr++;
+	if (*nptr == '-')
+		sign = -1;
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		if (*nptr == '-')
-			sign = 1;
-		if (*nptr == '-' || *nptr == '+')
-			nptr++;
-		while (nptr[i] >= 48 && nptr[i] <= 57)
-		{
-			num = (nptr[i] - 48) + (10 * num);
-			i++;
-		}
-		if (sign == 1)
-			num = num * -1;
+		if (sign == 1 && (num > (LLONG_MAX - (nptr[i] - '0')) / 10))
+			return (LLONG_MAX);
+		else if (sign == -1 && (num > (LLONG_MAX - (nptr[i] - '0')) / 10))
+			return (LLONG_MIN);
+		num = (nptr[i] - '0') + (10 * num);
+		i++;
 	}
-	return (num);
+	return (num * sign);
 }
 
 int	ft_strcmp(char *s1, char *s2)

@@ -23,6 +23,7 @@
 # include <stdint.h>
 # include <time.h>
 # include <stdbool.h>
+# include <limits.h>
 
 //DEFINES
 # define MAX 500
@@ -61,7 +62,7 @@ typedef struct s_philo
 }	t_philo;
 
 //ARGS
-int			arg_checker(int argc, char **argv);
+int			arg_checker(char **argv);
 
 //FREE
 int			ft_exit(t_philo *philo);
@@ -75,7 +76,7 @@ int			init_info(t_philo *philo, char **argv);
 //LIBFT
 int			ft_putstr_fd(char *str, int fd);
 int			ft_strlen(char *str);
-long		ft_atoi(char *nptr);
+long long	ft_atoll(const char *nptr);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_itoa(int nbr);
 
@@ -84,7 +85,7 @@ void		obituary(t_philo *philo);
 void		messages(char *str, t_philo *philo, size_t id);
 
 //MUTEX
-void		mutex_init(t_philo *philo);
+int			mutex_init(t_philo *philo);
 void		destroy_mutex(t_philo *philo);
 
 //ROUTINE

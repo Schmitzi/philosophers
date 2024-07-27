@@ -14,13 +14,9 @@
 
 int ft_exit(t_philo *philo)
 {
-    destroy_mutex(philo);
-    if (philo->info->forks)
-        free(philo->info->forks);
-    if (philo->info)
-        free(philo->info);
-    if (philo)
-        free(philo);
+    free(philo->info->forks);
+    free(philo->info);
+    free(philo);
     return (true);
 }
 

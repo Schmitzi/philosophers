@@ -18,18 +18,18 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		if (arg_checker(argc, argv))
+		if (arg_checker(argv))
 			return (false);
-		philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+		philo = malloc(sizeof(t_philo) * ft_atoll(argv[1]));
 		if (philo == NULL)
 			return (ft_perror("Philo malloc failed"), false);
 		if (init_all(philo, argv) == false)
-			return (ft_exit(philo), false);
-		if (thread_init(philo) == 0)
-			return (ft_exit(philo), false);
-		return (ft_exit(philo), true);
+			return (free(philo), false);
+		if (thread_init(philo) == false)
+			return (destroy_mutex(philo), ft_exit(philo), false);
+		return (destroy_mutex(philo), ft_exit(philo), true);
 	}
 	else
-		ft_perror("Error: Invalid number of arguments\n");
+		ft_perror("Error: Invalid number of arguments");
 	return (true);
 }
