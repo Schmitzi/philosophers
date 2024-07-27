@@ -17,7 +17,8 @@ void	mutex_init(t_philo *philo)
 	size_t	i;
 
 	i = 0;
-	pthread_mutex_init(&philo->info->write, NULL);
+	if (pthread_mutex_init(&philo->info->write, NULL) != 0)
+		return ((void)false);
 	pthread_mutex_init(&philo->info->death_check, NULL);
 	while (i < philo->info->count)
 	{
@@ -32,7 +33,7 @@ void	destroy_mutex(t_philo *philo)
 	size_t	i;
 
 	i = 0;
-	while (i < philo->info->count && philo[i].state == true)
+	while (i < philo->info->count && philo[i].state == true) //NOT INITIALIZED
 	{
 		pthread_mutex_destroy(&philo->info->forks[i]);
 		pthread_mutex_destroy(&philo[i].lock);

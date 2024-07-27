@@ -69,7 +69,7 @@ void		ft_perror(char *str);
 
 //INIT
 int			init_all(t_philo *philo, char **argv);
-void		init_philo(t_philo *philo);
+int			init_philo(t_philo *philo);
 int			init_info(t_philo *philo, char **argv);
 
 //LIBFT

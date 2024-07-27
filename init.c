@@ -20,16 +20,19 @@ int	init_all(t_philo *philo, char **argv)
 	if (init_info(philo, argv) == false)
 		return (false);
 	mutex_init(philo);
-	init_philo(philo);
+	if (init_philo(philo) == false)
+		return (false);
 	return (true);
 }
 
-void	init_philo(t_philo *philo)
+int	init_philo(t_philo *philo)
 {
 	size_t	i;
 
 	i = 0;
 	philo->info->begin = check_time();
+	if (philo->info->begin == 0)
+		return (false);
 	while (i < philo->info->count)
 	{
 		philo[i].id = i + 1;
@@ -51,6 +54,7 @@ void	init_philo(t_philo *philo)
 		}
 		i++;
 	}
+	return (true);
 }
 
 int	init_info(t_philo *philo, char **argv)
