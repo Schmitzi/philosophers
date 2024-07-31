@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:03:03 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:13:23 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:32:45 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,30 @@ int	dead_end(t_philo *philo)
 {
 	size_t	i;
 
-	i = -1;
-	while (++i < philo->info->count)
+	i = 0;
+	while (i < philo->info->count)
 	{
 		pthread_mutex_lock(&philo->info->death_check);
 		pthread_mutex_lock(&philo[i].lock);
 		if ((check_time() - philo[i].last_meal) >= philo->info->til_death)
 		{
-			philo->info->dead = 1;
+			philo->info->dead = true;
 			obituary(philo);
 			pthread_mutex_unlock(&philo[i].lock);
 			pthread_mutex_unlock(&philo->info->death_check);
-			return (1);
+			return (true);
 		}
-		if (philo[i].stop == 1 && ++philo->info->end == philo->info->count)
+		if (philo[i].stop == true && ++philo->info->end == philo->info->count)
 		{
 			pthread_mutex_unlock(&philo[i].lock);
 			pthread_mutex_unlock(&philo->info->death_check);
-			return (1);
+			return (true);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
 		pthread_mutex_unlock(&philo->info->death_check);
+		i++;
 	}
-	return (0);
+	return (false);
 }
 
 void	*monitor(void *ptr)
@@ -47,10 +48,8 @@ void	*monitor(void *ptr)
 
 	philo = (t_philo *)ptr;
 	while (1)
-	{
 		if (dead_end(philo) == 1)
 			return (ptr);
-	}
 	return (ptr);
 }
 
@@ -61,7 +60,7 @@ void	*routine(void *ptr)
 	philo = (t_philo *)ptr;
 	form_queue(philo);
 	pthread_mutex_lock(&philo->info->write);
-	while (death_check(philo) == 0)
+	while (death_check(philo) == false)
 	{
 		pthread_mutex_unlock(&philo->info->write);
 		eat(philo);

@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:02:27 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:02:28 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:59:13 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		if (arg_checker(argv))
+		if (arg_checker(argc, argv))
 			return (false);
-		philo = malloc(sizeof(t_philo) * ft_atoll(argv[1]));
+		philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 		if (philo == NULL)
 			return (ft_perror("Philo malloc failed"), false);
 		if (init_all(philo, argv) == false)
-			return (free(philo), false);
+			return (free(philo), 1);
 		if (thread_init(philo) == false)
-			return (destroy_mutex(philo), ft_exit(philo), false);
-		return (destroy_mutex(philo), ft_exit(philo), true);
+			return (ft_exit(philo), 1);
+		return (ft_exit(philo), 0);
 	}
 	else
-		ft_perror("Error: Invalid number of arguments");
-	return (true);
+		ft_perror("Error: Invalid number of arguments\n");
+	return (1);
 }

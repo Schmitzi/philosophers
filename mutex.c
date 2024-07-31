@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:02:47 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:02:48 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:59:52 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,22 @@ int	mutex_init(t_philo *philo)
 	return (true);
 }
 
-void	destroy_mutex(t_philo *philo)
+int	destroy_mutex(t_philo *philo)
 {
 	size_t	i;
 
 	i = 0;
-	while (philo->info->count && \
-		i < philo->info->count && philo[i].state == true)
+	while (i < philo->info->count)
 	{
-		pthread_mutex_destroy(&philo->info->forks[i]);
-		pthread_mutex_destroy(&philo[i].lock);
+		if (pthread_mutex_destroy(&philo->info->forks[i]) != 0)
+			return (false);
+		if (pthread_mutex_destroy(&philo[i].lock) != 0)
+			return (false);
 		i++;
 	}
-	pthread_mutex_destroy(&philo->info->write);
-	pthread_mutex_destroy(&philo->info->death_check);
+	if (pthread_mutex_destroy(&philo->info->write) != 0)
+		return (false);
+	if (pthread_mutex_destroy(&philo->info->death_check) != 0)
+		return (false);
+	return (true);
 }

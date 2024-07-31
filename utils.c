@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:07:12 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:07:13 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:27:17 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ int	death_check(t_philo *philo)
 	if (philo->meals_eaten < philo->info->meals)
 	{
 		pthread_mutex_lock(&philo->info->death_check);
-		if (philo->info->dead == 1)
-			return (pthread_mutex_unlock(&philo->info->death_check), 1);
-		return (pthread_mutex_unlock(&philo->info->death_check), 0);
+		if (philo->info->dead == true)
+			return (pthread_mutex_unlock(&philo->info->death_check), true);
+		return (pthread_mutex_unlock(&philo->info->death_check), false);
 	}
-	return (1);
+	return (true);
 }
 
 void	form_queue(t_philo *philo)
@@ -43,7 +43,7 @@ int	meal_check(t_philo *philo)
 	if (philo->meals_eaten == philo->info->meals)
 	{
 		pthread_mutex_lock(&philo->info->death_check);
-		philo->stop = 1;
+		philo->stop = true;
 		pthread_mutex_unlock(&philo->info->death_check);
 		pthread_mutex_unlock(&philo->info->write);
 		return (false);

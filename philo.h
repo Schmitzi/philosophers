@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:08:25 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:14:07 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:04:40 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <stdint.h>
 # include <time.h>
 # include <stdbool.h>
-# include <limits.h>
 
 //DEFINES
 # define MAX 500
@@ -62,7 +61,7 @@ typedef struct s_philo
 }	t_philo;
 
 //ARGS
-int			arg_checker(char **argv);
+int			arg_checker(int argc, char **argv);
 
 //FREE
 int			ft_exit(t_philo *philo);
@@ -76,7 +75,7 @@ int			init_info(t_philo *philo, char **argv);
 //LIBFT
 int			ft_putstr_fd(char *str, int fd);
 int			ft_strlen(char *str);
-long long	ft_atoll(const char *nptr);
+long		ft_atoi(char *nptr);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_itoa(int nbr);
 
@@ -86,7 +85,7 @@ void		messages(char *str, t_philo *philo, size_t id);
 
 //MUTEX
 int			mutex_init(t_philo *philo);
-void		destroy_mutex(t_philo *philo);
+int			destroy_mutex(t_philo *philo);
 
 //ROUTINE
 int			dead_end(t_philo *philo);
@@ -97,7 +96,7 @@ void		take_forks(t_philo *philo, pthread_mutex_t *left, \
 void		eat(t_philo *philo);
 
 //THREAD
-int			make_threads(t_philo *philo, pthread_t *thread);
+int			make_threads(t_philo *philo, pthread_t mon, pthread_t *thread);
 int			thread_init(t_philo *philo);
 
 //TIME
