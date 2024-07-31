@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:59:46 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:00:12 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:50:41 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,21 @@
 int	arg_checker(int argc, char **argv)
 {
 	int	i;
+	int j;
+	(void)argc;
 
 	i = 1;
-	while (i < argc)
+	j = 0;
+	while (argv[i])
 	{
-		//if (*argv[i] == ' ')
-		//{
-		//	i++;
-		//	continue ;
-		//}
-		if (*argv[i] < '0' || *argv[i] > '9')
-			return (ft_perror("Out of range"), 1);
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (ft_perror("Out of range"), 1);
+			j++;
+		}
 		i++;
 	}
-	argv++;
 	return (0);
 }

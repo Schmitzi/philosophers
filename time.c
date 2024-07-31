@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:06:12 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:13:54 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:31:23 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	ft_usleep(t_philo *philo, unsigned int ms)
 		if (elapsed >= ms || philo->info->dead != 0)
 		{
 			pthread_mutex_unlock(&philo->info->death_check);
-	 		break ;
+	 		//break ;
+			return ;
 		}
 		pthread_mutex_unlock(&philo->info->death_check);
 		usleep(100);

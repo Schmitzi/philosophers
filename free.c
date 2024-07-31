@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:00:20 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/27 11:34:24 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:15:34 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int ft_exit(t_philo *philo)
 {
-    destroy_mutex(philo);
     if (philo->info->forks)
         free(philo->info->forks);
     if (philo->info)

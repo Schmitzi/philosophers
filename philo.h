@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:08:25 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/17 15:14:07 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:04:40 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void		obituary(t_philo *philo);
 void		messages(char *str, t_philo *philo, size_t id);
 
 //MUTEX
-void		mutex_init(t_philo *philo);
-void		destroy_mutex(t_philo *philo);
+int			mutex_init(t_philo *philo);
+int			destroy_mutex(t_philo *philo);
 
 //ROUTINE
 int			dead_end(t_philo *philo);
@@ -96,7 +96,7 @@ void		take_forks(t_philo *philo, pthread_mutex_t *left, \
 void		eat(t_philo *philo);
 
 //THREAD
-int			make_threads(t_philo *philo, pthread_t *thread);
+int			make_threads(t_philo *philo, pthread_t mon, pthread_t *thread);
 int			thread_init(t_philo *philo);
 
 //TIME
