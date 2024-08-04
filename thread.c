@@ -6,11 +6,9 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:05:02 by mgeiger-          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/07/31 16:23:30 by mgeiger-         ###   ########.fr       */
-=======
 /*   Updated: 2024/07/31 16:17:38 by mgeiger-         ###   ########.fr       */
->>>>>>> 7e4668457dfb995ee09aeea4bed8bc9c31e29b89
+/*   Updated: 2024/08/01 19:41:56 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +21,21 @@ int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 
 	i = 0;
 	j = 0;
-<<<<<<< HEAD
-=======
 	while (i < philo->info->count)
 	{
 		philo[i].info = philo->info;
 		pthread_mutex_lock(&philo[i].lock);
-		// Attempt to create a new thread
 		if (pthread_create(&thread[i], NULL, routine, &philo[i]) != 0)
 		{
-			// If thread creation fails, join monitor thread
-			pthread_join(mon, NULL);
-
-			// Join all successfully created threads
+			if (pthread_join(mon, NULL) != 0)
+				return (false);
 			while (j < i)
 			{
-				pthread_join(thread[j], NULL);
+				if (pthread_join(thread[j], NULL) != 0)
+					return (false);
 				j++;
 			}
-
-			// Unlock the mutex and free memory
 			pthread_mutex_unlock(&philo[i].lock);
-			free(thread);
 			return (false);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
@@ -61,45 +52,22 @@ int	thread_init(t_philo *philo)
 
 	i = 0;
 
-	// Allocate memory for the thread array
 	thread = (pthread_t *)malloc(sizeof(pthread_t) * philo->info->count);
 	if (thread == NULL)
 		return (false);
-
-	// Create the monitor thread before passing it to make_threads
 	if (pthread_create(&mon, NULL, monitor, philo) != 0)
-	{
-		free(thread);
-		return (false);
-	}
-
-	// Create all philosopher threads
+		return (free(thread), false);
 	if (make_threads(philo, mon, thread) == false)
-	{
-		return (false);
-	}
-
-	// Join the monitor thread
+		return (free(thread), false);
 	if (pthread_join(mon, NULL) != 0)
-	{
-		free(thread);
-		return (false);
-	}
-
-	// Join all philosopher threads
+		return (free(thread), false);
 	while (i < philo->info->count)
 	{
 		if (pthread_join(thread[i], NULL) != 0)
-		{
-			free(thread);
-			return (false);
-		}
+			return (free(thread), false);
 		i++;
 	}
-
-	// Free the allocated memory for threads
-	free(thread);
-	return (true);
+	return (free(thread), true);
 }
 /*
 int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
@@ -179,7 +147,7 @@ int	thread_init(t_philo *philo)
 <<<<<<< HEAD
 	free(thread);
 	return (true);
-}	
+}
 /*
 int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 {
