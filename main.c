@@ -24,10 +24,10 @@ int	main(int argc, char **argv)
 		if (philo == NULL)
 			return (ft_perror("Philo malloc failed"), false);
 		if (init_all(philo, argv) == false)
-			return (free(philo), 1);
+			return (free(philo->thread), free(philo), 1);
 		if (thread_init(philo) == false)
-			return (ft_exit(philo), 1);
-		return (ft_exit(philo), 0);
+			return (destroy_mutex(philo), ft_exit(philo), 1);
+		return (destroy_mutex(philo), ft_exit(philo), 0);
 	}
 	else
 		ft_perror("Error: Invalid number of arguments\n");

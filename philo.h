@@ -53,8 +53,8 @@ typedef struct s_philo
 	size_t				meals_eaten;
 	size_t				last_meal;
 	size_t				stop;
-	pthread_t			thread;
 	pthread_mutex_t		lock;
+	pthread_t			*thread;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	t_info				*info;

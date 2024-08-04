@@ -57,6 +57,21 @@ int	init_philo(t_philo *philo)
 	return (true);
 }
 
+int	too_high(t_philo *philo)
+{
+	if (philo->info->count > 2147483647 || philo->info->count <= 0)
+		return (false);
+	if (philo->info->til_death > 2147483647 || philo->info->til_death <= 0)
+		return (false);
+	if (philo->info->eat_dur > 2147483647 || philo->info->eat_dur <= 0)
+		return (false);
+	if (philo->info->sleep_dur > 2147483647 || philo->info->sleep_dur <= 0)
+		return (false);
+	if (philo->info->meals > 2147483647)
+		return (false);
+	return (true);
+}
+
 int	init_info(t_philo *philo, char **argv)
 {
 	philo->info->count = ft_atoi(argv[1]);
@@ -67,9 +82,8 @@ int	init_info(t_philo *philo, char **argv)
 		philo->info->meals = ft_atoi(argv[5]);
 	else
 		philo->info->meals = -1;
-	if (philo->info->count <= 0 || philo->info->til_death <= 0 \
-		|| philo->info->eat_dur <= 0 || philo->info->sleep_dur <= 0)
-		return (ft_perror("Init failed"), false);
+	if (too_high(philo) == false)
+		return (ft_perror("Bad input"), false);
 	philo->info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
 		* (ft_atoi(argv[1])));
 	if (philo->info->forks == NULL)
