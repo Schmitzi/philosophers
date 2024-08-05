@@ -16,8 +16,8 @@ int	dead_end(t_philo *philo)
 {
 	size_t	i;
 
-	i = 0;
-	while (i < philo->info->count)
+	i = -1;
+	while (++i < philo->info->count)
 	{
 		pthread_mutex_lock(&philo->info->death_check);
 		pthread_mutex_lock(&philo[i].lock);
@@ -37,7 +37,6 @@ int	dead_end(t_philo *philo)
 		}
 		pthread_mutex_unlock(&philo[i].lock);
 		pthread_mutex_unlock(&philo->info->death_check);
-		i++;
 	}
 	return (false);
 }

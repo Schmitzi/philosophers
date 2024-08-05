@@ -18,27 +18,25 @@ int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 	size_t	i;
 	size_t	j;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (i < philo->info->count)
+	while (++i < philo->info->count)
 	{
 		philo[i].info = philo->info;
 		pthread_mutex_lock(&philo[i].lock);
 		if (pthread_create(&thread[i], NULL, routine, &philo[i]) != 0)
 		{
-			pthread_mutex_unlock(&philo[i].lock);
 			if (pthread_join(mon, NULL) != 0)
-				return (false);
+				return (pthread_mutex_unlock(&philo[i].lock), false);
 			while (j < i)
 			{
 				if (pthread_join(thread[j], NULL) != 0)
-					return (false);
+					return (pthread_mutex_unlock(&philo[i].lock), false);
 				j++;
 			}
-			return (false);
+			return (pthread_mutex_unlock(&philo[i].lock),false);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
-		i++;
 	}
 	return (true);
 }
