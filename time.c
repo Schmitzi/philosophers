@@ -16,26 +16,27 @@
 
 void	ft_usleep(t_philo *philo, unsigned int ms)
 {
-	u_int64_t	begin;
-	u_int64_t	curr;
-	size_t		elapsed;
+	u_int64_t	start_time;
+	u_int64_t	current_time;
+	size_t		time_elapsed;
 
-	begin = check_time();
-	while (check_time())
+	start_time = check_time();
+	while (1)
 	{
-		curr = check_time();
-		elapsed = curr - begin;
+		current_time = check_time();
+		time_elapsed = current_time - start_time;
 		pthread_mutex_lock(&philo->info->death_check);
-		if (elapsed >= ms || philo->info->dead != 0)
+		if (time_elapsed >= ms || philo->info->dead != 0)
 		{
 			pthread_mutex_unlock(&philo->info->death_check);
-	 		//break ;
-			return ;
+			break ;
 		}
 		pthread_mutex_unlock(&philo->info->death_check);
-		usleep(100);
+		if (ms > time_elapsed)
+			usleep(ms - time_elapsed);
+		else
+			usleep(100);
 	}
-	return ;
 }
 
 size_t	check_time(void)

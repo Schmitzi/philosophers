@@ -39,6 +39,22 @@ int	destroy_mutex(t_philo *philo)
 	i = 0;
 	while (i < philo->info->count)
 	{
+		pthread_mutex_destroy(&philo->info->forks[i]);
+		pthread_mutex_destroy(&philo[i].lock);
+		i++;
+	}
+	pthread_mutex_destroy(&philo->info->write);
+	pthread_mutex_destroy(&philo->info->death_check);
+	return (true);
+}
+/*
+int	destroy_mutex(t_philo *philo)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < philo->info->count)
+	{
 		if (pthread_mutex_destroy(&philo->info->forks[i]) != 0)
 			return (false);
 		if (pthread_mutex_destroy(&philo[i].lock) != 0)
@@ -50,4 +66,4 @@ int	destroy_mutex(t_philo *philo)
 	if (pthread_mutex_destroy(&philo->info->death_check) != 0)
 		return (false);
 	return (true);
-}
+}*/

@@ -12,17 +12,21 @@
 
 #include "philo.h"
 
-int ft_exit(t_philo *philo)
+int	ft_exit(t_philo *philo)
 {
-	if (philo->thread)
-		free(philo->thread);
-    if (philo->info->forks)
-        free(philo->info->forks);
-    if (philo->info)
-        free(philo->info);
-    if (philo)
-    	free(philo);
-    return (true);
+	if (philo)
+	{
+		if (philo->thread)
+			free(philo->thread);
+		if (philo->info)
+		{
+			if (philo->info->forks)
+				free(philo->info->forks);
+			free(philo->info);
+		}
+		free(philo);
+	}
+	return (0);
 }
 
 void	ft_perror(char *str)

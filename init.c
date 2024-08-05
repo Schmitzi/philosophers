@@ -26,6 +26,22 @@ int	init_all(t_philo *philo, char **argv)
 	return (true);
 }
 
+void	set_forks(t_philo *philo, int i)
+{
+	if (philo->id % 2 == 0)
+	{
+		philo[i].right_fork = &philo->info->forks[philo[i].id - 1];
+		philo[i].left_fork = &philo->info->forks[(philo[i].id) % \
+			philo->info->count];
+	}
+	else
+	{
+		philo[i].right_fork = &philo->info->forks[(philo[i].id) % \
+			philo->info->count];
+		philo[i].left_fork = &philo->info->forks[philo[i].id - 1];
+	}
+}
+
 int	init_philo(t_philo *philo)
 {
 	size_t	i;
@@ -40,18 +56,7 @@ int	init_philo(t_philo *philo)
 		philo[i].meals_eaten = 0;
 		philo[i].last_meal = philo->info->begin;
 		philo[i].stop = false;
-		if (philo->id % 2 == 0)
-		{
-			philo[i].right_fork = &philo->info->forks[philo[i].id - 1];
-			philo[i].left_fork = &philo->info->forks[(philo[i].id) % \
-				philo->info->count];
-		}
-		else
-		{
-			philo[i].right_fork = &philo->info->forks[(philo[i].id) % \
-				philo->info->count];
-			philo[i].left_fork = &philo->info->forks[philo[i].id - 1];
-		}
+		set_forks(philo, i);
 		i++;
 	}
 	return (true);
@@ -67,7 +72,8 @@ int	too_high(t_philo *philo)
 		return (false);
 	if (philo->info->sleep_dur > 2147483647 || philo->info->sleep_dur <= 0)
 		return (false);
-	if (philo->info->meals > 2147483647)
+	if (philo->info->meals != 18446744073709551615UL && \
+		philo->info->meals > 2147483647)
 		return (false);
 	return (true);
 }
@@ -81,7 +87,7 @@ int	init_info(t_philo *philo, char **argv)
 	if (argv[5])
 		philo->info->meals = ft_atoi(argv[5]);
 	else
-		philo->info->meals = -1;
+		philo->info->meals = 18446744073709551615UL;
 	if (too_high(philo) == false)
 		return (ft_perror("Bad input"), false);
 	philo->info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \

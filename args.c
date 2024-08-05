@@ -12,11 +12,10 @@
 
 #include "philo.h"
 
-int	arg_checker(int argc, char **argv)
+int	arg_checker(char **argv)
 {
 	int	i;
-	int j;
-	(void)argc;
+	int	j;
 
 	i = 1;
 	j = 0;

@@ -47,7 +47,6 @@ typedef struct s_info
 typedef struct s_philo
 {
 	size_t				id;
-	size_t				state;
 	size_t				eat;
 	size_t				til_death;
 	size_t				meals_eaten;
@@ -61,7 +60,7 @@ typedef struct s_philo
 }	t_philo;
 
 //ARGS
-int			arg_checker(int argc, char **argv);
+int			arg_checker(char **argv);
 
 //FREE
 int			ft_exit(t_philo *philo);
