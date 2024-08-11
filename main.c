@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{
 		if (arg_checker(argv))
-			return (false);
+			return (1);
 		philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 		if (philo == NULL)
 			return (ft_perror("Philo malloc failed"), 1);

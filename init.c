@@ -14,11 +14,16 @@
 
 int	init_all(t_philo *philo, char **argv)
 {
+    size_t  i;
+
+    i = -1;
 	philo->info = (t_info *)malloc(sizeof(t_info));
 	if (!philo->info)
 		return (ft_perror("Error malloc\n"), false);
 	if (init_info(philo, argv) == false)
 		return (free(philo->info), false);
+	while (++i < philo->info->count)
+	   philo[i].info = philo->info;
 	if (mutex_init(philo) == false)
 		return (free(philo->info), false);
 	if (init_philo(philo) == false)

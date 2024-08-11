@@ -48,7 +48,7 @@ void	*monitor(void *ptr)
 	philo = (t_philo *)ptr;
 	while (1)
 		if (dead_end(philo) == 1)
-			return (ptr);
+			return (NULL);
 	return (ptr);
 }
 

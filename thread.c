@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
 
 int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 {
@@ -22,7 +21,6 @@ int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 	j = 0;
 	while (++i < philo->info->count)
 	{
-		philo[i].info = philo->info;
 		pthread_mutex_lock(&philo[i].lock);
 		if (pthread_create(&thread[i], NULL, routine, &philo[i]) != 0)
 		{
@@ -34,7 +32,7 @@ int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 					return (pthread_mutex_unlock(&philo[i].lock), false);
 				j++;
 			}
-			return (pthread_mutex_unlock(&philo[i].lock),false);
+			return (pthread_mutex_unlock(&philo[i].lock), false);
 		}
 		pthread_mutex_unlock(&philo[i].lock);
 	}
