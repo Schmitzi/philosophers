@@ -29,7 +29,6 @@ RESET	=	\e[0m
 FILES	=	args \
             free \
 			init \
-			itoa \
 			libft \
 			main \
 			msg \

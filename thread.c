@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:05:02 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/08/05 16:07:39 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:29:22 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@ int	make_threads(t_philo *philo, pthread_t mon, pthread_t *thread)
 	while (++i < philo->info->count)
 	{
 		pthread_mutex_lock(&philo[i].lock);
+
 		if (pthread_create(&thread[i], NULL, routine, &philo[i]) != 0)
 		{
-			if (pthread_join(mon, NULL) != 0)
-				return (pthread_mutex_unlock(&philo[i].lock), false);
 			while (j < i)
 			{
 				if (pthread_join(thread[j], NULL) != 0)
 					return (pthread_mutex_unlock(&philo[i].lock), false);
 				j++;
 			}
+			if (pthread_join(mon, NULL) != 0)
+				return (pthread_mutex_unlock(&philo[i].lock), false);
 			return (pthread_mutex_unlock(&philo[i].lock), false);
 		}
 		pthread_mutex_unlock(&philo[i].lock);

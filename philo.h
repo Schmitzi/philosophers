@@ -76,7 +76,6 @@ int			ft_putstr_fd(char *str, int fd);
 int			ft_strlen(char *str);
 long		ft_atoi(char *nptr);
 int			ft_strcmp(char *s1, char *s2);
-char		*ft_itoa(int nbr);
 
 //MSG
 void		obituary(t_philo *philo);

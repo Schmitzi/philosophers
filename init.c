@@ -78,7 +78,7 @@ int	too_high(t_philo *philo)
 	if (philo->info->sleep_dur > 2147483647 || philo->info->sleep_dur <= 0)
 		return (false);
 	if (philo->info->meals != 18446744073709551615UL && \
-		philo->info->meals > 2147483647)
+		(philo->info->meals > 2147483647 || philo->info->meals == 0))
 		return (false);
 	return (true);
 }

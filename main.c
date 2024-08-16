@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 		if (philo == NULL)
 			return (ft_perror("Philo malloc failed"), 1);
 		if (init_all(philo, argv) == false)
-			return (free(philo->thread), free(philo), 1);
+			return (free(philo), 1);
 		if (thread_init(philo) == false)
 			return (destroy_mutex(philo), ft_exit(philo), 1);
 		return (destroy_mutex(philo), ft_exit(philo), 0);
