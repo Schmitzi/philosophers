@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 	{
 		if (arg_checker(argv))
 			return (1);
-		philo = (t_philo *)malloc(sizeof(t_philo) * atoi(argv[1]));
+		philo = (t_philo *)malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 		if (philo == NULL)
 			return (false);
 		if (init_all(philo, argv) == false)

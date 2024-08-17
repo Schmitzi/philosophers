@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-#include <sys/types.h>
 
 void	ft_usleep(t_philo *philo, unsigned int ms)
 {

@@ -47,8 +47,11 @@ void	*monitor(void *ptr)
 
 	philo = (t_philo *)ptr;
 	while (1)
+	{
 		if (dead_end(philo) == 1)
 			return (NULL);
+		usleep(200);
+	}
 	return (ptr);
 }
 
@@ -102,11 +105,13 @@ void	eat(t_philo *philo)
 	if (philo->info->count == 1)
 		return (ft_usleep(philo, philo->info->til_death));
 	pthread_mutex_lock(&philo->lock);
-	philo->meals_eaten++;
 	philo->last_meal = check_time();
 	pthread_mutex_unlock(&philo->lock);
 	messages("is eating", philo, philo->id);
 	ft_usleep(philo, philo->info->eat_dur);
+	pthread_mutex_lock(&philo->lock);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->lock);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

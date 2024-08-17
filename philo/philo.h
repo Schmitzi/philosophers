@@ -23,6 +23,7 @@
 # include <stdint.h>
 # include <time.h>
 # include <stdbool.h>
+# include <limits.h>
 
 //DEFINES
 # define MAX 500

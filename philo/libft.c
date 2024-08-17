@@ -48,8 +48,9 @@ long	ft_atoi(char *nptr)
 			nptr++;
 		while (nptr[i] >= 48 && nptr[i] <= 57)
 		{
-			num = (nptr[i] - 48) + (10 * num);
-			i++;
+			num = (nptr[i++] - 48) + (10 * num);
+			if (num > INT_MAX)
+				return (21474836488);
 		}
 		if (sign == 1)
 			num = num * -1;
