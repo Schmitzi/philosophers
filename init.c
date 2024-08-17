@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:00:38 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/08/01 19:53:54 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/08/17 11:51:57 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 int	init_all(t_philo *philo, char **argv)
 {
-    size_t  i;
+	size_t	i;
 
-    i = -1;
+	i = -1;
 	philo->info = (t_info *)malloc(sizeof(t_info));
 	if (!philo->info)
 		return (ft_perror("Error malloc\n"), false);
 	if (init_info(philo, argv) == false)
 		return (free(philo->info), false);
 	while (++i < philo->info->count)
-	   philo[i].info = philo->info;
+		philo[i].info = philo->info;
 	if (mutex_init(philo) == false)
 		return (free(philo->info), false);
 	if (init_philo(philo) == false)

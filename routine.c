@@ -80,7 +80,7 @@ void	take_forks(t_philo *philo, pthread_mutex_t *left, \
 	pthread_mutex_t *right)
 {
 	if (philo->info->count % 2 != 0 && philo->info->count != 1)
-		ft_usleep(philo, 50);
+		ft_usleep(philo, philo->info->eat_dur);
 	pthread_mutex_lock(left);
 	messages("has taken a fork", philo, philo->id);
 	if (left == right)

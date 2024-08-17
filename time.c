@@ -35,7 +35,7 @@ void	ft_usleep(t_philo *philo, unsigned int ms)
 		if (ms > time_elapsed)
 			usleep(ms - time_elapsed);
 		else
-			usleep(100);
+			usleep(10);
 	}
 }
 

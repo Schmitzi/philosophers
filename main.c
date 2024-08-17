@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:02:27 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/08/05 12:52:21 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/08/17 11:13:05 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	main(int argc, char **argv)
 	{
 		if (arg_checker(argv))
 			return (1);
-		philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+		philo = (t_philo *)malloc(sizeof(t_philo) * atoi(argv[1]));
 		if (philo == NULL)
-			return (ft_perror("Philo malloc failed"), 1);
+			return (false);
 		if (init_all(philo, argv) == false)
 			return (free(philo), 1);
 		if (thread_init(philo) == false)

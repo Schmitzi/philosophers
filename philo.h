@@ -6,7 +6,7 @@
 /*   By: mgeiger- <mgeiger-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:08:25 by mgeiger-          #+#    #+#             */
-/*   Updated: 2024/07/31 16:04:40 by mgeiger-         ###   ########.fr       */
+/*   Updated: 2024/08/17 10:59:10 by mgeiger-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ typedef struct s_philo
 	size_t				last_meal;
 	size_t				stop;
 	pthread_mutex_t		lock;
-	pthread_t			*thread;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	t_info				*info;
@@ -65,6 +64,7 @@ int			arg_checker(char **argv);
 //FREE
 int			ft_exit(t_philo *philo);
 void		ft_perror(char *str);
+void		stop_threads(pthread_t *threads, size_t i);
 
 //INIT
 int			init_all(t_philo *philo, char **argv);
